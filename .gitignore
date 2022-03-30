@@ -1,0 +1,9 @@
+/.svn
+/.classpath
+/.project
+/.settings
+/.envrc
+/mvn
+/bin
+/target
+/java-xmlbuilder
