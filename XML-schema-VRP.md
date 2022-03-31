@@ -66,7 +66,8 @@
       - toTime（表示routeStart和routeEnd之间的运输时长）
 
 ## 属性要满足的格式
-- name:①小于25字符 ②客户之间、车型之间不重复（同类不重复）
+- name:①小于25字符 ②客户之间、车型之间、routeStart、routeEnd之间不重复（同类不重复）
 - id：小于25字符
 - 所有数据格式为number的:①最多10位（包括小数点） ②符合数字格式
 - timelb, timeub:时间格式
+- routeStart、routeEnd的name要属于customers

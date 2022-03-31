@@ -3,62 +3,8 @@
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
 targetNamespace="qjy:vrp"
 xmlns="qjy:vrp"
+xmlns:qv="qjy:vrp"
 elementFormDefault="qualified">
-
-
-
-
-
-
-
-<!-- global attribute -->
-<xs:attribute name="id">
-    <xs:simpleType>
-        <xs:restriction base="xs:string">
-            <xs:length value="25"></xs:length>
-        </xs:restriction>
-    </xs:simpleType>
-</xs:attribute>
-
-<xs:attribute name="name" type="xs:string" default="VRP">
-</xs:attribute>
-
-<xs:attribute name="namespace" type="xs:string"
-fixed="qjy:vrp">
-</xs:attribute>
-
-<xs:attribute name="symmetric"
-type="xs:boolean"></xs:attribute>
-
-<xs:attribute name="solveTime" type="tenDigitDecimal">
-</xs:attribute>
-
-<xs:attribute name="gap" type="tenDigitDecimal"></xs:attribute>
-
-<xs:attribute name="method">
-    <xs:simpleType>
-        <xs:restriction base="xs:string">
-            <xs:enumeration value="exact"></xs:enumeration>
-            <xs:enumeration value="heuristic"></xs:enumeration>
-        </xs:restriction>
-    </xs:simpleType>
-</xs:attribute>
-
-<xs:attribute name="serveTime" type="tenDigitDecimal"></xs:attribute>
-
-<xs:attribute name="volume" type="tenDigitDecimal"></xs:attribute>
-
-<xs:attribute name="timeLb" type="clockTime"></xs:attribute>
-
-<xs:attribute name="timeUb" type="clockTime"></xs:attribute>
-
-<xs:attribute name="number" type="tenDigitInteger"></xs:attribute>
-
-<xs:attribute name="capacity" type="tenDigitDecimal"></xs:attribute>
-
-<xs:attribute name="toCost" type="tenDigitDecimal"></xs:attribute>
-
-<xs:attribute name="toTime" type="tenDigitDecimal"></xs:attribute>
 
 <!-- root element-->
 <xs:element name="vrp" type="vrp">
@@ -100,14 +46,29 @@ type="xs:boolean"></xs:attribute>
 <!-- global complexType: construct reference relationship  -->
 <xs:complexType name="vrp">
     <xs:all>
-        <xs:element name="customers" type="customers"></xs:element>
+        <xs:element name="customers" type="customers">
+            <xs:unique name="uniqueCustomer">
+                <xs:selector xpath="qv:customer"></xs:selector>
+                <xs:field xpath="@name"></xs:field>
+            </xs:unique>
+        </xs:element>
         <xs:element name="depot" type="depot"></xs:element>
-        <xs:element name="vehicles" type="vehicles"></xs:element> 
+        <xs:element name="vehicles" type="vehicles">
+            <xs:unique name="uniqueVehicle">
+                <xs:selector xpath="qv:vehicle"></xs:selector>
+                <xs:field xpath="@name"></xs:field>
+            </xs:unique>
+        </xs:element> 
         <xs:element name="solveParam" type="solveParam"></xs:element>
-        <xs:element name="routes"></xs:element>
+        <xs:element name="routes" type="routes">
+            <xs:unique name="uniqueRouteStart">
+                <xs:selector xpath="qv:routeStart"></xs:selector>
+                <xs:field xpath="@name"></xs:field>
+            </xs:unique>
+        </xs:element>
     </xs:all>
-    <xs:attribute ref="name"></xs:attribute>
-    <xs:attribute ref="namespace" use="prohibited"></xs:attribute>
+    <xs:attribute name="name" type="chars25"></xs:attribute>
+    <xs:attribute name="namespace" use="prohibited" fixed="qjy:vrp"></xs:attribute>
 </xs:complexType>
 
 <xs:complexType name="customers">
@@ -146,73 +107,29 @@ type="xs:boolean"></xs:attribute>
     <xs:attribute name="method" default="exact" type="solveMethods"></xs:attribute>
 </xs:complexType>
 
-<xs:complexType name="route">
+<xs:complexType name="routes">
     <xs:sequence>
-        <xs:element name="routeStart" maxOccurs="unbounded" type="routeStart"></xs:element>
+        <xs:element name="routeStart" maxOccurs="unbounded" type="routeStart">
+            <xs:unique name="uniqueRouteEnd">
+                <xs:selector xpath="qv:routeEnd"></xs:selector>
+                <xs:field xpath="@name"></xs:field>
+            </xs:unique>
+        </xs:element>
     </xs:sequence>
     <xs:attribute name="symmetric" default="true" type="xs:boolean"></xs:attribute>
 </xs:complexType>
 
 <xs:complexType name="routeStart">
     <xs:sequence>
-        <xs:element name="routeEnd" maxOccurs="unbounded"></xs:element>
+        <xs:element name="routeEnd" maxOccurs="unbounded" type="routeEnd"></xs:element>
     </xs:sequence>
     <xs:attribute name="name" use="required" type="chars25"></xs:attribute>
 </xs:complexType>
 
-<!-- 
-<xs:element name="routes">
-    <xs:complexType>
-        <xs:sequence>
-            <xs:element ref="routeStart" maxOccurs="unbounded"></xs:element>
-        </xs:sequence>
-        <xs:attribute ref="symmetric" default="true"></xs:attribute>
-    </xs:complexType>
-</xs:element>
-
-<xs:element name="vehicles">
-    <xs:complexType>
-        <xs:sequence>
-            <xs:element ref="vehicle" minOccurs="1" maxOccurs="unbounded"></xs:element>
-        </xs:sequence>
-    </xs:complexType>
-</xs:element>
-
-
-
-<xs:element name="customer">
-    <xs:complexType> 
-        <xs:attribute ref="name" use="required"></xs:attribute>
-        <xs:attribute ref="serveTime" use="required"></xs:attribute>
-        <xs:attribute ref="volume" use="required"></xs:attribute>
-        <xs:attribute ref="timeLb" use="required"></xs:attribute>
-        <xs:attribute ref="timeUb" use="required"></xs:attribute>
-    </xs:complexType>
-</xs:element>
-
-<xs:element name="routeStart">
-    <xs:complexType>
-        <xs:sequence>
-            <xs:element name="routeEnd" maxOccurs="unbounded"></xs:element>
-        </xs:sequence>
-        <xs:attribute ref="name" use="required"></xs:attribute>
-    </xs:complexType>
-</xs:element>
-
-<xs:element name="vehicle">
-    <xs:complexType>
-        <xs:attribute ref="name" use="required"></xs:attribute>
-        <xs:attribute ref="number" use="required"></xs:attribute>
-        <xs:attribute ref="capacity" use="required"></xs:attribute>
-    </xs:complexType>
-</xs:element>
-
-<xs:element name="routeEnd">
-    <xs:complexType>
-        <xs:attribute ref="name" use="required"></xs:attribute>
-        <xs:attribute ref="toCost" use="required"></xs:attribute>
-        <xs:attribute ref="toTime" use="required"></xs:attribute>
-    </xs:complexType>
-</xs:element> -->
+<xs:complexType name="routeEnd">
+    <xs:attribute name="name" use="required" type="chars25"></xs:attribute>
+    <xs:attribute name="toCost" use="required" type="tenDigitDecimal"></xs:attribute>
+    <xs:attribute name="toTime" use="required" type="tenDigitDecimal"></xs:attribute>
+</xs:complexType>
 
 </xs:schema>

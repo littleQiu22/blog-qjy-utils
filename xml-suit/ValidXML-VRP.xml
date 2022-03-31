@@ -9,11 +9,21 @@ qjy:vrp
 >
     <customers>
         <customer name="customer" serveTime="1" volume="1" timeLb="00:00" timeUb="00:00" />
+        <!-- <customer name="customer" serveTime="1" volume="1" timeLb="00:00" timeUb="00:00" /> -->
     </customers>
     <depot name="depot"/>
     <vehicles>
         <vehicle name="vehicle" number="1" capacity="1.2" />
+        <!-- <vehicle name="vehicle" number="1" capacity="1.2" /> -->
     </vehicles>
     <solveParam />
-    
+    <routes>
+        <routeStart name="customer">
+            <routeEnd name="customer2" toCost="1" toTime="2" />
+            <!-- <routeEnd name="customer2" toCost="1" toTime="2" /> -->
+        </routeStart>
+        <!-- <routeStart name="customer">
+            <routeEnd name="customer2" toCost="1" toTime="2" />
+        </routeStart> -->
+    </routes>
 </vrp>

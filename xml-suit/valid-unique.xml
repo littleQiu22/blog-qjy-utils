@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<authors xmlns="http://tempuri.org/myschema/unique"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="
+http://tempuri.org/myschema/unique
+./schema-unique.xsd"
+>
+    <author>a1</author>
+    <author>a1</author>
+</authors>
