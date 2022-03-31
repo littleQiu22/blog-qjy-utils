@@ -1,0 +1,170 @@
+<?xml version="1.0"?>
+
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+targetNamespace="qjy:vrp"
+xmlns="qjy:vrp"
+elementFormDefault="qualified">
+
+<!-- global simpleType: restriction for text -->
+
+<xs:simpleType name="clockTime">
+    <xs:restriction base="xs:string">
+            <xs:pattern value="([0-1][0-9]|2[0-3]):[0-5][0-9]"></xs:pattern>
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="tenDigitDecimal">
+    <xs:restriction base="xs:decimal">
+        <xs:totalDigits value="10"></xs:totalDigits>  
+    </xs:restriction>
+</xs:simpleType>
+
+<xs:simpleType name="tenDigitInteger">
+    <xs:restriction base="xs:integer">
+        <xs:totalDigits value="10"></xs:totalDigits>
+    </xs:restriction>
+</xs:simpleType>
+
+<!-- global attribute -->
+
+<xs:attribute name="id">
+    <xs:simpleType>
+        <xs:restriction base="xs:string">
+            <xs:length value="25"></xs:length>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:attribute>
+
+<xs:attribute name="name" type="xs:string" default="VRP">
+</xs:attribute>
+
+<xs:attribute name="namespace" type="xs:string"
+fixed="qjy:vrp">
+</xs:attribute>
+
+<xs:attribute name="symmetric"
+type="xs:boolean"></xs:attribute>
+
+<xs:attribute name="solveTime" type="tenDigitDecimal">
+</xs:attribute>
+
+<xs:attribute name="gap" type="tenDigitDecimal"></xs:attribute>
+
+<xs:attribute name="method">
+    <xs:simpleType>
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="exact"></xs:enumeration>
+            <xs:enumeration value="heuristic"></xs:enumeration>
+        </xs:restriction>
+    </xs:simpleType>
+</xs:attribute>
+
+<xs:attribute name="serveTime" type="tenDigitDecimal"></xs:attribute>
+
+<xs:attribute name="volume" type="tenDigitDecimal"></xs:attribute>
+
+<xs:attribute name="timeLb" type="clockTime"></xs:attribute>
+
+<xs:attribute name="timeUb" type="clockTime"></xs:attribute>
+
+<xs:attribute name="number" type="tenDigitInteger"></xs:attribute>
+
+<xs:attribute name="capacity" type="tenDigitDecimal"></xs:attribute>
+
+<xs:attribute name="toCost" type="tenDigitDecimal"></xs:attribute>
+
+<xs:attribute name="toTime" type="tenDigitDecimal"></xs:attribute>
+
+<!-- element -->
+<!-- root -->
+<xs:element name="vrp">
+    <xs:complexType>
+        <xs:all>
+            <xs:element name="customers"></xs:element>
+            <xs:element name="depot"></xs:element>
+            <xs:element name="vehicles"></xs:element>
+            <xs:element name="solving"></xs:element>
+            <xs:element name="routes"></xs:element>
+        </xs:all>
+        <xs:attribute ref="name"></xs:attribute>
+        <xs:attribute ref="namespace"></xs:attribute>
+    </xs:complexType>
+</xs:element>
+
+<!-- first echelon element -->
+<xs:element name="customers">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="customer" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="depot">
+    <xs:complexType>
+        <xs:attribute ref="name"></xs:attribute>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="routes">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="routeStart" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+        <xs:attribute ref="symmetric"></xs:attribute>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="vehicles">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element ref="vehicle" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="solving">
+    <xs:complexType>
+        <xs:attribute ref="solveTime"></xs:attribute>
+        <xs:attribute ref="gap"></xs:attribute>
+        <xs:attribute ref="method"></xs:attribute>
+    </xs:complexType>
+</xs:element>
+
+<!-- second echelon element -->
+<xs:element name="customer">
+    <xs:complexType> 
+        <xs:attribute ref="name"></xs:attribute>
+        <xs:attribute ref="serveTime"></xs:attribute>
+        <xs:attribute ref="volume"></xs:attribute>
+        <xs:attribute ref="timeLb"></xs:attribute>
+        <xs:attribute ref="timeUb"></xs:attribute>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="routeStart">
+    <xs:complexType>
+        <xs:sequence>
+            <xs:element name="routeEnd" maxOccurs="unbounded"></xs:element>
+        </xs:sequence>
+        <xs:attribute ref="name"></xs:attribute>
+    </xs:complexType>
+</xs:element>
+
+<xs:element name="vehicle">
+    <xs:complexType>
+        <xs:attribute ref="name"></xs:attribute>
+        <xs:attribute ref="number"></xs:attribute>
+        <xs:attribute ref="capacity"></xs:attribute>
+    </xs:complexType>
+</xs:element>
+
+<!-- third echelon element -->
+<xs:element name="routeEnd">
+    <xs:complexType>
+        <xs:attribute ref="name"></xs:attribute>
+        <xs:attribute ref="toCost"></xs:attribute>
+        <xs:attribute ref="toTime"></xs:attribute>
+    </xs:complexType>
+</xs:element>
+</xs:schema>

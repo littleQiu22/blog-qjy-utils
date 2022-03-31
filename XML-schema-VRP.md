@@ -1,0 +1,72 @@
+# 车辆路径规划的XML设计规范
+## 元素
+- 根元素：vrp（表示车辆路径规划这个问题）
+  - 子元素：
+    - customers（表示客户群，required, single）
+    - depot（表示车场，required, single）
+    - routes（表示两点间的运输成本和时长，required, single）
+    - vehicles（表示车辆群，required, single）
+    - solving（表示求解设置，optional, single）
+  - 属性：
+    - name（该问题实例的名称, optional string） 
+    - id（该问题的id，optional string）
+    - namespace: （不可修改，固定为qjy:vrp，用于后台XPath查找时加前缀用）
+- 一级元素：
+  - customers:
+    - 子元素：
+      - customer（表示一个客户，required, multiple）
+    - 属性：
+      - id(optional string)
+  - depot:
+    - 子元素：无
+    - 属性：
+      - name（该depot的名字，required string）
+  - routes:
+    - 子元素：
+      - routeStart (表示起点，required，multiple)
+    - 属性：
+      - symmetric（表示是否对称，optional boolean）
+  - vehicles:
+    - 子元素：
+      - vehicle（表示车辆，required，multiple）
+    - 属性：
+  - solving:
+    - 子元素：无
+    - 属性：
+      - time（求解时间（秒），optional number）
+      - gap（可以提前停止的gap,optional numebr）
+      - method（所使用的方法,精确或启发，optional selection)
+- 二级元素：
+  - customer：
+    - 子元素：无
+    - 属性：
+      - name（客户名称，required string）
+      - serveTime（服务时长，required number）
+      - volume（需要的商品体积，required number）
+      - timeLb（时间窗下界，required string）
+      - timeub（时间窗上界，required string）
+      - id(optional string)
+  - routeStart:
+    - 子元素：
+      - routeEnd（表示终点，required，multiple）
+    - 属性：
+      - name（表示起点客户/车场的名称，required string）
+  - vehicle:
+    - 子元素：无
+    - 属性：
+      - name（车型的名称，required string）
+      - number（车型的数量，required number）
+      - capacity（车型的容量，required number）
+- 三级元素：
+  - routeEnd:
+    - 子元素：无
+    - 属性：
+      - name（表示终点客户/车场的名称，required string）
+      - toCost（表示routeStart和routeEnd之间的运输成本）
+      - toTime（表示routeStart和routeEnd之间的运输时长）
+
+## 属性要满足的格式
+- name:①小于25字符 ②客户之间、车型之间不重复（同类不重复）
+- id：小于25字符
+- 所有数据格式为number的:①最多10位（包括小数点） ②符合数字格式
+- timelb, timeub:时间格式
