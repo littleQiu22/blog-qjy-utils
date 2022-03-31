@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<vrp
+xmlns="qjy:vrp"
+xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+xsi:schemaLocation="
+qjy:vrp 
+./XML-schema-VRP.xsd"
+>
+    <customers>
+        <customer name="customer" serveTime="1" volume="1" timeLb="00:00" timeUb="00:00" />
+    </customers>
+    <depot name="depot"/>
+    <vehicles>
+        <vehicle name="vehicle" number="1" capacity="1.2" />
+    </vehicles>
+    <solveParam />
+    
+</vrp>
